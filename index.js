@@ -1,30 +1,59 @@
 const API_URL = `https://fsa-crud-2aa9294fe819.herokuapp.com/api/2309-FTB-ET-WEB-FT/events`;
 let state =[];
-const eventsForm = document.getElementById('addEvents');
-const events = document.getElementById('events');
+const eventsForm = document.getElementById("addEvents");
+const eventsList = document.getElementById("events");
 eventsForm.addEventListener("submit",addEvent)
 
 //for adding events 
-// async function reRender() {
-//     await getEvents
-//     renderEvents()
-// }
+
+async function reRender() {
+    await getEvents
+    renderEvents()
+}
 
 
 async function getEvents() {
+    try{
+        
     const response = await fetch(API_URL);
     const json = await response.json();
     state.events = json.data; // replaces empty array
+
+    } catch (error) {
+      console.log(error.message)
+    }
+
 }
 
 
 // function getEvents() {
 
-// }
+// } I think we need a regular function for this??? might not
 
-// function renderEvents(){
+function renderEvents(){
 
-// }
+    if (!state.events.length) {
+        eventsList.innerHTML = "<li> No events! :( <li>";
+        return;
+    }
+
+    const eventCards = state.events.map((event) => {
+        const li = document.createElement("li")
+
+        li.innerHTML = `
+        <h2>${event.name}</h2>
+        <p>${event.date}</p>
+        <p>${event.time}</p>
+        <p>${event.location}</p>
+        <p>${event.description}</p>
+        `;
+
+        return li;
+    });
+
+    eventsList.replaceChildren(...eventCards)
+
+}
 
 
 
