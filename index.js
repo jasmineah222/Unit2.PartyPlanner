@@ -28,7 +28,7 @@ async function getEvents() {
 
 // function getEvents() {
 
-// } I think we need a regular function for this??? might not
+// } I think we need a regular function for this??? not sure
 
 function renderEvents(){
 
@@ -67,7 +67,8 @@ async function addEvent() {
     let location = eventsForm.location.value
     let description = eventsForm.description.value
     
-    const response = await (API_URL,{
+    try {
+        const response = await (API_URL,{
         method: "POST",
         headers: {"Content-Type":"application/json"},
         body: JSON.stringify({
@@ -77,6 +78,13 @@ async function addEvent() {
             location,
             description,
         }),
-    })
-            
-}
+      });
+
+        if (!response.ok) {
+            throw new Error("Nah, try again!")
+        }
+        renderEvents();
+        } catch (error) {
+            console.log(error.message);
+        }    
+    }
